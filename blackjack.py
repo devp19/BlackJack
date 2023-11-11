@@ -33,7 +33,6 @@ class Players():
     def update_points(self, points):
         self.points = points
         
-    
     # print(playerList[0].get_points())
 
     # playerList[0].update_points(90)
@@ -56,7 +55,6 @@ for i in range(1, numberofPlayers+1):
 for player in playerList:
     print(player)
     
-
 # -------------------------------
 # Create Deck of Cards
 # -------------------------------
@@ -75,20 +73,15 @@ with open ('/Users/devpatel/Documents/GitHub/BlackJack/deckofcards.txt', 'r') as
     
     #print(originalDeck)
 
-    
 # --------------------------------
 # Giving Values to Royal Cards
 # --------------------------------
 
 royalValues = {
-    'A':11,
+    'A': 11,
     'K': 10,
-    'Q':10,
-    'J':10,
+    'Q': 10,
+    'J': 10,
 }
 
 #print(royalValues['K']) == 10
-
-# -------------------------------
-# Cards in Current Round
-# -------------------------------
