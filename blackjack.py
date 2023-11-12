@@ -11,6 +11,7 @@ Section No.  : 4
 # ----------------------------------
 
 import random
+import getpass
 
 # -------------------------------
 # Create Deck of Cards
@@ -31,9 +32,8 @@ currentDeck = originalDeck
 
 
 value = random.choice(currentDeck)
+#print(value)
 
-del value
-    #print(originalDeck)
 
 # ----------------------------------
 # Player Data Class
@@ -41,18 +41,26 @@ del value
 
 class Players():
     
-    def __init__(self, name, points=100):
+    def __init__(self, name, points = 100, currentBet=0):
         self.name = name 
         self.points = points
+        self.currentBet = currentBet
         
     def __str__(self):
-        return(f'Player Name: {self.name} | Points: {self.points}')
+        #return(f'Player Name: {self.name} | Points: {self.points}')
+        return(f'Player Name: {self.name} | Points: {self.points} | Bet: {self.currentBet}')
         
     def get_points(self):
         return self.points
     
     def update_points(self, points):
         self.points = points
+
+    def get_bet(self):
+        return self.currentBet
+    
+    def update_bet(self, currentBet):
+        self.currentBet = currentBet
         
     # print(playerList[0].get_points())
 
@@ -64,8 +72,13 @@ class Players():
 # Card Display Function
 # --------------------------------
 
-def displayCard():
-        type = '♠'
+def displayCard(value, type):
+        
+        space = ' '
+        
+        if value[2] == '10':
+            space = ''
+        
         
         card = [
                 [' -','-','-','-','-', '-','-'],
@@ -74,7 +87,7 @@ def displayCard():
                 ['|    ', '', '', '', '     |'],
                 ['|    ', '', '', '', '     |'],
                 ['|    ', '', '', '', '     |'],
-                ['|    ', '', '7', '', '    |'],
+                ['|    ', '', f'{value[2]}', '', f'   {space}|'],
                 ['|    ', '', '', '', '     |'],
                 ['|    ', '', '', '', '     |'],
                 ['|    ', '', '', '', '     |'],
@@ -87,7 +100,7 @@ def displayCard():
         for row in card:
             print(' '.join(row))
         
-displayCard()
+#displayCard()
 
 # --------------------------------
 # Giving Values to Royal Cards
@@ -118,25 +131,90 @@ CardValues = {
 # ----------------------------------
 
 Suit = {
-    'SPADE' : 'S',
-    'DIAMOND': 'D',
-    'CLUB' : 'C',
-    'HEART' : 'H',
+    'SPADE' : '♠',
+    'DIAMOND': '♦',
+    'CLUB' : '♣',
+    'HEART' : '♥'
 }
+
+# type = Suit.get(value[1])
+# print(type)
+
+# displayCard(value, type)
 
 # ----------------------------------
 # Create Player Instance
 # ----------------------------------
 
-numberofPlayers = int(input('Enter number of players: '))
+def playerSetup(playerList):
+    numberofPlayers = int(input('Enter number of players playing: '))
 
-playerList = []
-
-for i in range(1, numberofPlayers+1):
-    playerName = input(f'Enter Player {i} Name: ')
-    playerObj = Players(playerName)
-    playerList.append(playerObj)
+    for i in range(1, numberofPlayers+1):
+        playerName = input(f'Enter Player {i} Name: ')
+        playerObj = Players(playerName)
+        playerList.append(playerObj)
+        
     
-for player in playerList:
-    print(player)
+    return playerList
+
+
+def main():
+    
+    print('')
+    print('Welcome to Blackjack in Python!')
+    print('')
+    print('Press Enter/Return to start playing!')
+    
+    beginGame = getpass.getpass(prompt='', stream=None)
+
+    if not beginGame:
+        playerList = []
+        gameRunning = True
+        round = 1
+        
+        playerSetup(playerList)
+        
+        for player in playerList:
+            print(player)
+        
+        print('')
+        
+        while gameRunning:
+            
+            print(f'Begin Round {round}?')
+            
+            print('Enter to Continue!')
+            print('Any other key to end game and get final scores!')
+            
+            beginRound = input()
+            
+            if not beginRound:
+                round += 1
+                
+                for i in range(0, len(playerList)):
+                    
+                    if playerList[i].get_points() >= 1:
+                        
+                        print(f'{playerList[i].name}, it\'s your turn!')
+                        print(f'You currently have {playerList[i].get_points()} points!')
+                        playerList[i].update_bet(int(input('How much would you like to bet?: ')))
+                        
+                        if playerList[i].get_bet() > playerList[i].get_points():
+                            playerList[i].update_bet(playerList[i].get_points())
+                            print(f'You\'re bet has been set to {playerList[i].get_bet()} since you didn\'t have enough points!')
+                        
+                        playerList[i].update_points(playerList[i].get_points() - playerList[i].get_bet())
+                    
+                        print(playerList[i])
+                        
+                    else:
+                        print(f'{playerList[i].name}, you do not have any remaining points!')
+            else:
+                break
+    else:
+        print('Have a good day!')
+        
+if __name__ == '__main__':
+    main()
+    
     
