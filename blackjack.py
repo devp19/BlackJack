@@ -13,13 +13,13 @@ Section No.  : 4
 import random
 import getpass
 
-# -------------------------------
-# Create Deck of Cards
-# -------------------------------
+# ------------------------------------
+# Create Deck of Cards (File Import)
+# ------------------------------------
 
 originalDeck = []
 
-with open ('/Users/devpatel/Documents/GitHub/BlackJack/deckofcards.txt', 'r') as file:
+with open ('deckofcards.txt', 'r') as file:
     lines = file.readlines()
     
     card_list = [line.strip() for line in lines]
@@ -28,7 +28,7 @@ with open ('/Users/devpatel/Documents/GitHub/BlackJack/deckofcards.txt', 'r') as
         card = card.split('|')
         originalDeck.append(card)
 
-currentDeck = originalDeck
+currentDeck = list(originalDeck)
 
 
 value = random.choice(currentDeck)
@@ -41,11 +41,12 @@ value = random.choice(currentDeck)
 
 class Players():
     
-    def __init__(self, name, points = 100, currentBet=0):
+    def __init__(self, name, points = 100, currentBet=0, roundSum = 0):
         self.name = name 
         self.points = points
         self.currentBet = currentBet
-        
+        self.roundSum = 0
+
     def __str__(self):
         #return(f'Player Name: {self.name} | Points: {self.points}')
         return(f'Player Name: {self.name} | Points: {self.points} | Bet: {self.currentBet}')
@@ -61,7 +62,16 @@ class Players():
     
     def update_bet(self, currentBet):
         self.currentBet = currentBet
-        
+    
+    def update_cardSum(self, roundSum):
+        self.roundSum += roundSum
+
+    def reset_cardSum(self):
+        self.roundSum = 0
+    
+    def get_roundSum(self):
+        return self.roundSum
+
     # print(playerList[0].get_points())
 
     # playerList[0].update_points(90)
@@ -101,6 +111,17 @@ def displayCard(value, type):
             print(' '.join(row))
         
 #displayCard()
+
+# --------------------------------
+# Reset Deck for New Round
+# --------------------------------
+def resetCards(originalDeck, currentDeck):
+    
+    currentDeck = list(originalDeck)
+
+
+    return currentDeck
+    
 
 # --------------------------------
 # Giving Values to Royal Cards
@@ -170,8 +191,9 @@ def main():
     if not beginGame:
         playerList = []
         gameRunning = True
-        round = 1
+        round = 0
         
+
         playerSetup(playerList)
         
         for player in playerList:
@@ -181,7 +203,8 @@ def main():
         
         while gameRunning:
             
-            print(f'Begin Round {round}?')
+
+            print(f'Begin Game?')
             
             print('Enter to Continue!')
             print('Any other key to end game and get final scores!')
@@ -190,6 +213,7 @@ def main():
             
             if not beginRound:
                 round += 1
+                pot = 0
                 
                 for i in range(0, len(playerList)):
                     
@@ -198,17 +222,74 @@ def main():
                         print(f'{playerList[i].name}, it\'s your turn!')
                         print(f'You currently have {playerList[i].get_points()} points!')
                         playerList[i].update_bet(int(input('How much would you like to bet?: ')))
+                        print('')
                         
                         if playerList[i].get_bet() > playerList[i].get_points():
                             playerList[i].update_bet(playerList[i].get_points())
-                            print(f'You\'re bet has been set to {playerList[i].get_bet()} since you didn\'t have enough points!')
+                            print('')
+                            print(f'Your bet has been set to {playerList[i].get_bet()} since you didn\'t have enough points!')
                         
                         playerList[i].update_points(playerList[i].get_points() - playerList[i].get_bet())
-                    
+                        pot += playerList[i].get_bet()
+
                         print(playerList[i])
-                        
+                        print('')
                     else:
+                        print('')
                         print(f'{playerList[i].name}, you do not have any remaining points!')
+                    
+                
+                
+                print('-'*30) 
+                print(f'Round {round} started!')
+                print(f'Current Pot is {pot} tokens!')
+
+                for i in range(0, len(playerList)):
+
+                    if playerList[i].get_bet() == 0:
+                        continue
+
+                    else:
+                        print('')
+                        print(f'{playerList[i].name}, your turn! ')
+                        print('')
+                        
+                        Flag = True
+    
+
+                        while Flag == True:
+                            value = random.choice(currentDeck)
+                            print(value)
+                            type = Suit.get(value[1]) 
+                            currentDeck.remove(value)
+                        
+                            playerList[i].update_cardSum(CardValues[value[2]])
+                            #print(playerList[i].get_roundSum())
+                            displayCard(value, type)
+
+
+
+                            if playerList[i].get_roundSum() == 21:
+                                print('Nice! You Hit 21! Let\'s see how the dealer does!')
+                                print('')
+                                break
+
+                            elif playerList[i].get_roundSum() > 21:
+                                
+                                print('Bust! You\'ve went over 21! Better luck next round!')
+                                print('')
+                                break
+                                
+                            
+                            flag2 = input(f'Your sum is {playerList[i].get_roundSum()}! Hit or Stand? (H/S) ')
+
+                            if flag2 == 'S':
+                                Flag = False
+
+                        if playerList[i].get_roundSum() < 21:     
+                            print(f'{playerList[i].name}, your total is {playerList[i].get_roundSum()}!')
+                        print('-'*30)
+                        print('-'*30)
             else:
                 break
     else:
