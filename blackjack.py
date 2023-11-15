@@ -255,19 +255,27 @@ def main():
                         print('')
                         
                         Flag = True
-    
+                        AceFound = False
 
                         while Flag == True:
                             value = random.choice(currentDeck)
                             print(value)
                             type = Suit.get(value[1]) 
-                            currentDeck.remove(value)
-                        
-                            playerList[i].update_cardSum(CardValues[value[2]])
+
+                            if AceFound == False:
+                                playerList[i].update_cardSum(CardValues[value[2]])
+                                
+                            elif AceFound == True:
+                                print('You already have an ACE so 1 has been added to your sum!')
+                                playerList[i].update_cardSum(1)
+                                
                             #print(playerList[i].get_roundSum())
                             displayCard(value, type)
 
-
+                            if value[2] == 'A':
+                                AceFound = True
+                                
+                            currentDeck.remove(value)
 
                             if playerList[i].get_roundSum() == 21:
                                 print('Nice! You Hit 21! Let\'s see how the dealer does!')
@@ -290,6 +298,21 @@ def main():
                             print(f'{playerList[i].name}, your total is {playerList[i].get_roundSum()}!')
                         print('-'*30)
                         print('-'*30)
+                        print('')
+                print('Dealer\'s Turn!')
+                        
+                dealerSum = 0
+                
+                while dealerSum <= 17:
+                    value = random.choice(currentDeck)
+                    print(value)
+                    type = Suit.get(value[1]) 
+                    currentDeck.remove(value)
+                    displayCard(value, type)
+                    dealerSum += CardValues[value[2]]
+                
+                print(f'The dealer is at {dealerSum}!')
+                            
             else:
                 break
     else:
