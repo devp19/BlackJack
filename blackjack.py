@@ -28,13 +28,6 @@ with open ('deckofcards.txt', 'r') as file:
         card = card.split('|')
         originalDeck.append(card)
 
-currentDeck = list(originalDeck)
-
-
-value = random.choice(currentDeck)
-#print(value)
-
-
 # ----------------------------------
 # Player Data Class
 # ----------------------------------
@@ -49,7 +42,7 @@ class Players():
 
     def __str__(self):
         #return(f'Player Name: {self.name} | Points: {self.points}')
-        return(f'Player Name: {self.name} | Points: {self.points} | Bet: {self.currentBet}')
+        return(f'Player Name: {self.name} | Tokens: {self.points} | Bet: {self.currentBet}')
         
     def get_points(self):
         return self.points
@@ -63,11 +56,14 @@ class Players():
     def update_bet(self, currentBet):
         self.currentBet = currentBet
     
+    def reset_bet(self, currentBet=0):
+        self.currentBet = currentBet
+    
     def update_cardSum(self, roundSum):
         self.roundSum += roundSum
 
-    def reset_cardSum(self):
-        self.roundSum = 0
+    def reset_roundSum(self, roundSum=0):
+        self.roundSum = roundSum
     
     def get_roundSum(self):
         return self.roundSum
@@ -111,17 +107,6 @@ def displayCard(value, type):
             print(' '.join(row))
         
 #displayCard()
-
-# --------------------------------
-# Reset Deck for New Round
-# --------------------------------
-def resetCards(originalDeck, currentDeck):
-    
-    currentDeck = list(originalDeck)
-
-
-    return currentDeck
-    
 
 # --------------------------------
 # Giving Values to Royal Cards
@@ -200,13 +185,14 @@ def main():
             print(player)
         
         print('')
+        print(f'Begin Game?')
         
         while gameRunning:
             
 
-            print(f'Begin Game?')
             
-            print('Enter to Continue!')
+            
+            print(f'Enter to start round {round}!')
             print('Any other key to end game and get final scores!')
             
             beginRound = input()
@@ -215,6 +201,9 @@ def main():
                 round += 1
                 pot = 0
                 
+
+                currentDeck = originalDeck.copy()
+                print('Now it is', len(currentDeck))
                 for i in range(0, len(playerList)):
                     
                     if playerList[i].get_points() >= 1:
@@ -262,10 +251,10 @@ def main():
                             print(value)
                             type = Suit.get(value[1]) 
 
-                            if AceFound == False:
+                            if AceFound == False or ((AceFound == True) and value[2] != 'A'):
                                 playerList[i].update_cardSum(CardValues[value[2]])
                                 
-                            elif AceFound == True:
+                            elif AceFound == True and value[2] == 'A':
                                 print('You already have an ACE so 1 has been added to your sum!')
                                 playerList[i].update_cardSum(1)
                                 
@@ -276,7 +265,8 @@ def main():
                                 AceFound = True
                                 
                             currentDeck.remove(value)
-
+                            print('Now it is', len(currentDeck))
+                            
                             if playerList[i].get_roundSum() == 21:
                                 print('Nice! You Hit 21! Let\'s see how the dealer does!')
                                 print('')
@@ -300,19 +290,63 @@ def main():
                         print('-'*30)
                         print('')
                 print('Dealer\'s Turn!')
-                        
+                print('')
                 dealerSum = 0
                 
-                while dealerSum <= 17:
-                    value = random.choice(currentDeck)
-                    print(value)
-                    type = Suit.get(value[1]) 
-                    currentDeck.remove(value)
-                    displayCard(value, type)
-                    dealerSum += CardValues[value[2]]
+                viewDealer = getpass.getpass(prompt=f'Press Enter to view the dealer\'s cards!', stream=None)
+                if not viewDealer:
+                    while dealerSum <= 17:
+                        value = random.choice(currentDeck)
+                        print(value)
+                        type = Suit.get(value[1]) 
+                        currentDeck.remove(value)
+                        displayCard(value, type)
+                        dealerSum += CardValues[value[2]]
+                    
+                    print(f'The dealer is at {dealerSum}!')
+                    print('')
                 
-                print(f'The dealer is at {dealerSum}!')
+                for i in range(len(playerList)):
+                    
+                    if playerList[i].get_roundSum() <= 21:
+                        if dealerSum == playerList[i].get_roundSum():
+                            playerList[i].update_points(playerList[i].get_points() + \
+                                playerList[i].get_bet())
                             
+                            print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
+                            print('')
+                        elif (dealerSum < playerList[i].get_roundSum() < 21) or dealerSum > 21:
+                            playerList[i].update_points(playerList[i].get_points() + \
+                                (2*playerList[i].get_bet()))
+
+                            print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
+                            print('')
+                        elif playerList[i].get_roundSum() == 21:
+                            playerList[i].update_points(playerList[i].get_points() + \
+                                (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
+                            
+                            print(f'Amazing {playerList[i].name}! The blackjack won you a total of \
+                                {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
+                            print('')
+                        else:
+                             
+                            print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
+                            print('')
+                    elif playerList[i].get_roundSum() > 21 and dealerSum > 21:
+                        print(f'{playerList[i].name}, you are lucky! Since the dealer also went over 21, your bet \n of {playerList[i].get_bet()} has been returned!')
+                        print('')
+                    
+                    else:
+                        print(f'{playerList[i].name}, tough luck! You lost {playerList[i].get_bet()} tokens. Better luck next time!')
+    
+                
+                print(f'Round {round} results!')
+                for i in range(len(playerList)):
+                    playerList[i].reset_bet()
+                    playerList[i].reset_roundSum()
+                    print(playerList[i])
+                    print('')
+                
             else:
                 break
     else:
