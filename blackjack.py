@@ -109,7 +109,7 @@ def displayCard(value, type):
 #displayCard()
 
 # --------------------------------
-# Giving Values to Royal Cards
+# Giving Values to Cards
 # --------------------------------
 
 CardValues = {
@@ -127,8 +127,7 @@ CardValues = {
     '3': 3,
     '2': 2,
     '1': 1
-    
-}
+    }
 
 #print(royalValues['K']) == 10
 
@@ -160,11 +159,19 @@ def playerSetup(playerList):
         playerObj = Players(playerName)
         playerList.append(playerObj)
         
-    
+    print('')
     return playerList
 
+# ----------------------------------
+# Game Control System
+# ----------------------------------
 
 def main():
+    
+    print('')
+    print('-'*30) 
+    print('BlackJack in Python!')
+    print('-'*30) 
     
     print('')
     print('Welcome to Blackjack in Python!')
@@ -174,6 +181,12 @@ def main():
     beginGame = getpass.getpass(prompt='', stream=None)
 
     if not beginGame:
+        
+        print('-'*30) 
+        print(f'Player Setup')
+        print('-'*30) 
+        print('')
+        
         playerList = []
         gameRunning = True
         round = 1
@@ -184,7 +197,9 @@ def main():
             print(player)
         
         print('')
-        print(f'Begin Game?')
+        print('-'*30) 
+        
+        print('Begin Game?')
         
         while gameRunning:
             
@@ -195,8 +210,14 @@ def main():
             
             if not beginRound:       
 
+                print('-'*30) 
+                print(f'Round {round} Started!')
+                print('-'*30) 
+                
                 currentDeck = originalDeck.copy()
-                print('Now it is', len(currentDeck))
+                #print('Now it is', len(currentDeck))
+                print('')
+                
                 for i in range(0, len(playerList)):
                     
                     if playerList[i].get_points() >= 1:
@@ -213,18 +234,19 @@ def main():
                         
                         playerList[i].update_points(playerList[i].get_points() - playerList[i].get_bet())
                 
-
                         print(playerList[i])
                         print('')
+                        
                     else:
                         print('')
                         print(f'{playerList[i].name}, you do not have any remaining points!')
                     
+                    print('-'*30) 
+                    print('')
                 
-                
-                print('-'*30) 
-                print(f'Round {round} started!')
-    
+                # print('-'*30) 
+                # print(f'Round {round} Started!')
+                # print('-'*30) 
 
                 for i in range(0, len(playerList)):
 
@@ -232,7 +254,7 @@ def main():
                         continue
 
                     else:
-                        print('')
+                        #print('')
                         print(f'{playerList[i].name}, your turn! ')
                         print('')
                         
@@ -241,7 +263,7 @@ def main():
 
                         while Flag == True:
                             value = random.choice(currentDeck)
-                            print(value)
+                            #print(value)
                             type = Suit.get(value[1]) 
 
                             if AceFound == False or ((AceFound == True) and value[2] != 'A'):
@@ -258,22 +280,24 @@ def main():
                                 AceFound = True
                                 
                             currentDeck.remove(value)
-                            print('Now it is', len(currentDeck))
+                            #print('Now it is', len(currentDeck))
                             
                             if playerList[i].get_roundSum() == 21:
+                                print('')
                                 print('Nice! You Hit 21! Let\'s see how the dealer does!')
                                 print('')
                                 break
 
                             elif playerList[i].get_roundSum() > 21:
-                                
+                                print('')
                                 print('Bust! You\'ve went over 21! Better luck next round!')
                                 print('')
                                 break
                                 
-                            
+                            print('-'*30) 
                             flag2 = input(f'Your sum is {playerList[i].get_roundSum()}! Hit or Stand? (H/S) ')
-
+                            print('-'*30) 
+                            
                             if flag2 == 'S':
                                 Flag = False
 
@@ -282,6 +306,7 @@ def main():
                         print('-'*30)
                         print('-'*30)
                         print('')
+                        
                 print('Dealer\'s Turn!')
                 print('')
                 dealerSum = 0
@@ -290,15 +315,18 @@ def main():
                 if not viewDealer:
                     while dealerSum <= 17:
                         value = random.choice(currentDeck)
-                        print(value)
+                        #print(value)
                         type = Suit.get(value[1]) 
                         currentDeck.remove(value)
                         displayCard(value, type)
                         dealerSum += CardValues[value[2]]
                     
-                    print(f'The dealer is at {dealerSum}!')
                     print('')
-                
+                    print('-'*30) 
+                    print(f'The dealer is at {dealerSum}!')
+                    print('-'*30) 
+                    print('')
+                    
                 for i in range(len(playerList)):
                     
                     if playerList[i].get_roundSum() <= 21:
@@ -331,14 +359,18 @@ def main():
                     else:
                         print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
                         print('')
+                        
                 print('-'*30)
                 print(f'Round {round} | Results!')
+                print('-'*30)
                 
                 for i in range(len(playerList)):
                     playerList[i].reset_bet()
                     playerList[i].reset_roundSum()
                     print(playerList[i])
                     print('')
+                
+                print('-'*30)
                 
                 round += 1
                 
