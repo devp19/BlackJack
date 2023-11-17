@@ -176,9 +176,8 @@ def main():
     if not beginGame:
         playerList = []
         gameRunning = True
-        round = 0
-        
-
+        round = 1
+    
         playerSetup(playerList)
         
         for player in playerList:
@@ -189,18 +188,12 @@ def main():
         
         while gameRunning:
             
-
-            
-            
             print(f'Enter to start round {round}!')
             print('Any other key to end game and get final scores!')
             
             beginRound = input()
             
-            if not beginRound:
-                round += 1
-                pot = 0
-                
+            if not beginRound:       
 
                 currentDeck = originalDeck.copy()
                 print('Now it is', len(currentDeck))
@@ -219,7 +212,7 @@ def main():
                             print(f'Your bet has been set to {playerList[i].get_bet()} since you didn\'t have enough points!')
                         
                         playerList[i].update_points(playerList[i].get_points() - playerList[i].get_bet())
-                        pot += playerList[i].get_bet()
+                
 
                         print(playerList[i])
                         print('')
@@ -231,7 +224,7 @@ def main():
                 
                 print('-'*30) 
                 print(f'Round {round} started!')
-                print(f'Current Pot is {pot} tokens!')
+    
 
                 for i in range(0, len(playerList)):
 
@@ -309,43 +302,45 @@ def main():
                 for i in range(len(playerList)):
                     
                     if playerList[i].get_roundSum() <= 21:
+                        
                         if dealerSum == playerList[i].get_roundSum():
                             playerList[i].update_points(playerList[i].get_points() + \
                                 playerList[i].get_bet())
                             
                             print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
                             print('')
+                            
                         elif (dealerSum < playerList[i].get_roundSum() < 21) or dealerSum > 21:
                             playerList[i].update_points(playerList[i].get_points() + \
                                 (2*playerList[i].get_bet()))
 
                             print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
                             print('')
+                            
                         elif playerList[i].get_roundSum() == 21:
                             playerList[i].update_points(playerList[i].get_points() + \
                                 (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
                             
-                            print(f'Amazing {playerList[i].name}! The blackjack won you a total of \
-                                {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
+                            print(f'Amazing {playerList[i].name}! The blackjack won you a total of {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
                             print('')
-                        else:
-                             
+                            
+                        else:     
                             print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
                             print('')
-                    elif playerList[i].get_roundSum() > 21 and dealerSum > 21:
-                        print(f'{playerList[i].name}, you are lucky! Since the dealer also went over 21, your bet \n of {playerList[i].get_bet()} has been returned!')
-                        print('')
                     
                     else:
-                        print(f'{playerList[i].name}, tough luck! You lost {playerList[i].get_bet()} tokens. Better luck next time!')
-    
+                        print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
+                        print('')
+                print('-'*30)
+                print(f'Round {round} | Results!')
                 
-                print(f'Round {round} results!')
                 for i in range(len(playerList)):
                     playerList[i].reset_bet()
                     playerList[i].reset_roundSum()
                     print(playerList[i])
                     print('')
+                
+                round += 1
                 
             else:
                 break
