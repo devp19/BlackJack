@@ -38,7 +38,7 @@ class Players():
         self.name = name 
         self.points = points
         self.currentBet = currentBet
-        self.roundSum = 0
+        self.roundSum = roundSum
 
     def __str__(self):
         #return(f'Player Name: {self.name} | Points: {self.points}')
@@ -203,7 +203,7 @@ def main():
         
         while gameRunning:
             
-            print(f'Enter to start round {round}!')
+            print(f'Press Enter to Start Round {round}!')
             print('Any other key to end game and get final scores!')
             
             beginRound = input()
@@ -284,7 +284,7 @@ def main():
                             
                             if playerList[i].get_roundSum() == 21:
                                 print('')
-                                print('Nice! You Hit 21! Let\'s see how the dealer does!')
+                                print('BLACKJACK! You Hit 21! Let\'s see how the dealer does!')
                                 print('')
                                 break
 
@@ -304,6 +304,7 @@ def main():
                         if playerList[i].get_roundSum() < 21:     
                             print(f'{playerList[i].name}, your total is {playerList[i].get_roundSum()}!')
                         print('-'*30)
+                        print('')
                         print('-'*30)
                         print('')
                         
@@ -311,7 +312,10 @@ def main():
                 print('')
                 dealerSum = 0
                 
-                viewDealer = getpass.getpass(prompt=f'Press Enter to view the dealer\'s cards!', stream=None)
+                viewDealer = getpass.getpass(prompt=f'Press Enter to View the Dealer\'s Cards!', stream=None)
+                print('-'*30)
+                print('')
+                
                 if not viewDealer:
                     while dealerSum <= 17:
                         value = random.choice(currentDeck)
