@@ -14,7 +14,7 @@ import random
 import getpass
 
 # ------------------------------------
-# Create Deck of Cards (File Import)
+# Create Deck of Cards (File Input)
 # ------------------------------------
 
 originalDeck = []
@@ -27,6 +27,14 @@ with open ('deckofcards.txt', 'r') as file:
     for card in card_list:
         card = card.split('|')
         originalDeck.append(card)
+        
+# ------------------------------------
+# Round Statistics (File Output)
+# ------------------------------------
+
+resultsOutput = open("results.txt", "a+")
+
+resultsOutput.write('BlackJack Game Data | Developed by Dev Patel\n')
 
 # ----------------------------------
 # Player Data Class
@@ -190,7 +198,7 @@ def main():
         playerList = []
         gameRunning = True
         round = 1
-    
+        
         playerSetup(playerList)
         
         for player in playerList:
@@ -212,6 +220,14 @@ def main():
 
                 print('-'*30) 
                 print(f'Round {round} Started!')
+                
+                resultsOutput.write('\n')
+                resultsOutput.write('-'*30)
+                resultsOutput.write('\n')
+                resultsOutput.write(f'Round {round} | Results\n')
+                resultsOutput.write('-'*30)
+                resultsOutput.write('\n')
+                
                 print('-'*30) 
                 
                 currentDeck = originalDeck.copy()
@@ -221,7 +237,7 @@ def main():
                 for i in range(0, len(playerList)):
                     
                     if playerList[i].get_points() >= 1:
-                        
+                                            
                         print(f'{playerList[i].name}, it\'s your turn!')
                         print(f'You currently have {playerList[i].get_points()} points!')
                         playerList[i].update_bet(int(input('How much would you like to bet?: ')))
@@ -249,7 +265,7 @@ def main():
                 # print('-'*30) 
 
                 for i in range(0, len(playerList)):
-
+                                        
                     if playerList[i].get_bet() == 0:
                         continue
 
@@ -306,7 +322,7 @@ def main():
                         print('-'*30)
                         print('')
                         print('-'*30)
-                        print('')
+                        print('')    
                         
                 print('Dealer\'s Turn!')
                 print('')
@@ -332,12 +348,14 @@ def main():
                     print('')
                     
                 for i in range(len(playerList)):
-                    
+
                     if playerList[i].get_roundSum() <= 21:
                         
                         if dealerSum == playerList[i].get_roundSum():
                             playerList[i].update_points(playerList[i].get_points() + \
                                 playerList[i].get_bet())
+                            
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {0} Tokens (PUSH / NO-CHANGE)\n')
                             
                             print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
                             print('')
@@ -345,7 +363,9 @@ def main():
                         elif (dealerSum < playerList[i].get_roundSum() < 21) or dealerSum > 21:
                             playerList[i].update_points(playerList[i].get_points() + \
                                 (2*playerList[i].get_bet()))
-
+                            
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet()} Tokens (WIN)\n')
+                            
                             print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
                             print('')
                             
@@ -353,17 +373,20 @@ def main():
                             playerList[i].update_points(playerList[i].get_points() + \
                                 (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
                             
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} Tokens (BLACKJACK WIN)\n')
+                            
                             print(f'Amazing {playerList[i].name}! The blackjack won you a total of {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
                             print('')
                             
                         else:     
                             print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
                             print('')
-                    
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {-playerList[i].get_bet()} Tokens (LOSS)\n')
                     else:
                         print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
                         print('')
-                        
+                        resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {-playerList[i].get_bet()} Tokens (LOSS/BUST)\n')
+                
                 print('-'*30)
                 print(f'Round {round} | Results!')
                 print('-'*30)
@@ -373,15 +396,16 @@ def main():
                     playerList[i].reset_roundSum()
                     print(playerList[i])
                     print('')
-                
+                    
                 print('-'*30)
                 
                 round += 1
                 
             else:
                 break
-    else:
-        print('Have a good day!')
+  
+    resultsOutput.close()
+    print('Have a good day!')
         
 if __name__ == '__main__':
     main()
