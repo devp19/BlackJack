@@ -2,8 +2,27 @@
 CPS 109 - Assignment
 Project Name : BlackJack
 Developed By : Dev Patel
-Student ID   : //
 Section No.  : 4
+'''
+
+
+# ----------------------------------
+# Problem/Program Description
+# ----------------------------------
+
+'''
+
+The problem/program I've decided to work on to showcase my python skills and abilities
+for this assignment is to simulate the card-game "BlackJack". 
+
+In order to simulate this card-game, the sub-problems include but are not limited to the following:
+    
+    i) Deck of Cards  | Card-Randomizer, Assigning Values to Royals (A, K, Q, J), Removing Card from Deck, Reset Deck (NEW ROUND)
+    ii) Player Data   | Dynamically Store and Read Data (BASED ON # OF PEOPLE), Player Tokens, Bet, Card Sum --> Class (OOP)
+    iii) Card Display | Template, Suit Display (HEART/SPADE/CLUB/DIAMOND), Dynamically Center Value (BASED ON # OF CHARACTERS VALUE HOLDS)
+    iv) Token System  | Token Distribution (Arithemetic Operations)
+    v) Game History   | Store Round Data (Build Game History) --> Output to a File!
+    
 '''
 
 # ----------------------------------
