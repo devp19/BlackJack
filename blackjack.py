@@ -34,7 +34,7 @@ with open ('deckofcards.txt', 'r') as file:
 
 resultsOutput = open("results.txt", "a+")
 
-resultsOutput.write('BlackJack Game Data | Developed by Dev Patel\n')
+resultsOutput.write('BlackJack Game History | Developed by Dev Patel\n')
 
 # ----------------------------------
 # Player Data Class
@@ -360,7 +360,7 @@ def main():
                             print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
                             print('')
                             
-                        elif (dealerSum < playerList[i].get_roundSum() < 21) or dealerSum > 21:
+                        elif (dealerSum < playerList[i].get_roundSum() < 21) or (dealerSum > 21 and playerList[i].get_roundSum() < 21):
                             playerList[i].update_points(playerList[i].get_points() + \
                                 (2*playerList[i].get_bet()))
                             
