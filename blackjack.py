@@ -16,11 +16,28 @@ for this assignment is to simulate the card-game "BlackJack".
 
 In order to simulate this card-game, the sub-problems include but are not limited to the following:
     
-    i) Deck of Cards  | Card-Randomizer, Assigning Values to Royals (A, K, Q, J), Removing Card from Deck, Reset Deck (NEW ROUND)
-    ii) Player Data   | Dynamically Store and Read Data (BASED ON # OF PEOPLE), Player Tokens, Bet, Card Sum --> Class (OOP)
-    iii) Card Display | Template, Suit Display (HEART/SPADE/CLUB/DIAMOND), Dynamically Center Value (BASED ON # OF CHARACTERS VALUE HOLDS)
-    iv) Token System  | Token Distribution (Arithemetic Operations)
-    v) Game History   | Store Round Data (Build Game History) --> Output to a File!
+    i) Deck of Cards
+        ↳ Card-Randomizer | (Use "random" library to randomly select a card from the deck)
+            ↳ Assigning Values to Royals (A, K, Q, J) | (Assign values through dictionary (type(str) : type(int)))
+                ↳ Removing Card from Deck | (Once a card is selected it should no longer be in the deck. Remove itself.)
+                    ↳ Reset Deck (NEW ROUND) | (Reset round deck back to original deck which was from reading the file)
+                    
+    ii) Player Data (Class)
+        ↳ Dynamically Store and Read Data (BASED ON # OF PEOPLE) | (Create a new instance for each player registered)
+            ↳ Player Tokens | (Hold token data --> Assign each player to their own amount of tokens)
+                ↳ Round Betting System | (Track the players bet for the round)
+                    ↳ Card Total System | (Track the sum of the cards they picked up throughout the round)
+                    
+    iii) Card Display
+        ↳ Template for Display | (Blank template of a card for display)
+            ↳ Dynamically Center Value | (For example, 10 is the only card with 2 characters. Need to consider spacing)
+                ↳ Suit Display (HEART/SPADE/CLUB/DIAMOND) | (Select the suit from the random card)
+                
+    iv) Token System
+        ↳ Token Distribution (Arithemetic Operations) | (Adder/Subtractor and BlackJack multiplier for round win/loss)
+        
+    v) Game History
+        ↳ Store Round Data (Build Game History) --> Output to a File!
     
 '''
 
@@ -366,49 +383,49 @@ def main():
                     print('')
                     
                 for i in range(len(playerList)):
-                    if playerList[i].get_points() == 0:
+                    
+                    if 0 < playerList[i].get_roundSum() <= 21:
+                        
+                        if dealerSum == playerList[i].get_roundSum():
+                            playerList[i].update_points(playerList[i].get_points() + \
+                                playerList[i].get_bet())
+                            
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {0} Tokens (PUSH / NO-CHANGE)\n')
+                            
+                            print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
+                            print('')
+                            
+                        elif (dealerSum < playerList[i].get_roundSum() < 21) or (dealerSum > 21 and playerList[i].get_roundSum() < 21):
+                            playerList[i].update_points(playerList[i].get_points() + \
+                                (2*playerList[i].get_bet()))
+                            
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {+playerList[i].get_bet()} Tokens (WIN)\n')
+                            
+                            print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
+                            print('')
+                            
+                        elif playerList[i].get_roundSum() == 21:
+                            playerList[i].update_points(playerList[i].get_points() + \
+                                (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
+                            
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {+playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} Tokens (BLACKJACK WIN)\n')
+                            
+                            print(f'Amazing {playerList[i].name}! The blackjack won you a total of {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
+                            print('')
+                            
+                        else:     
+                            print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
+                            print('')
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {-playerList[i].get_bet()} Tokens (LOSS)\n')
+                    elif playerList[i].get_roundSum() > 21:
+                        print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
+                        print('')
+                        resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {-playerList[i].get_bet()} Tokens (LOSS/BUST)\n')
+
+                    else:
                         resultsOutput.write(f'Player Name: {playerList[i].name} | (No Tokens)')
                         resultsOutput.write('\n')
-                    else:
                         
-                        if playerList[i].get_roundSum() <= 21:
-                            
-                            if dealerSum == playerList[i].get_roundSum():
-                                playerList[i].update_points(playerList[i].get_points() + \
-                                    playerList[i].get_bet())
-                                
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {0} Tokens (PUSH / NO-CHANGE)\n')
-                                
-                                print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
-                                print('')
-                                
-                            elif (dealerSum < playerList[i].get_roundSum() < 21) or (dealerSum > 21 and playerList[i].get_roundSum() < 21):
-                                playerList[i].update_points(playerList[i].get_points() + \
-                                    (2*playerList[i].get_bet()))
-                                
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {+playerList[i].get_bet()} Tokens (WIN)\n')
-                                
-                                print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
-                                print('')
-                                
-                            elif playerList[i].get_roundSum() == 21:
-                                playerList[i].update_points(playerList[i].get_points() + \
-                                    (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
-                                
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {+playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} Tokens (BLACKJACK WIN)\n')
-                                
-                                print(f'Amazing {playerList[i].name}! The blackjack won you a total of {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
-                                print('')
-                                
-                            else:     
-                                print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
-                                print('')
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {-playerList[i].get_bet()} Tokens (LOSS)\n')
-                        else:
-                            print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
-                            print('')
-                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {-playerList[i].get_bet()} Tokens (LOSS/BUST)\n')
-
                 print('-'*50)
                 print(f'Round {round} | Results!')
                 print('-'*50)
