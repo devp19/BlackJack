@@ -5,7 +5,6 @@ Developed By : Dev Patel
 Section No.  : 4
 '''
 
-
 # ----------------------------------
 # Problem/Program Description
 # ----------------------------------
@@ -196,9 +195,9 @@ def playerSetup(playerList):
 def main():
     
     print('')
-    print('-'*30) 
+    print('-'*50) 
     print('BlackJack in Python!')
-    print('-'*30) 
+    print('-'*50) 
     
     print('')
     print('Welcome to Blackjack in Python!')
@@ -209,9 +208,9 @@ def main():
 
     if not beginGame:
         
-        print('-'*30) 
+        print('-'*50) 
         print(f'Player Setup')
-        print('-'*30) 
+        print('-'*50) 
         print('')
         
         playerList = []
@@ -220,11 +219,11 @@ def main():
         
         playerSetup(playerList)
         
-        for player in playerList:
-            print(player)
+        for i in range(len(playerList)):
+            print(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()}')
         
         print('')
-        print('-'*30) 
+        print('-'*50) 
         
         print('Begin Game?')
         
@@ -237,17 +236,17 @@ def main():
             
             if not beginRound:       
 
-                print('-'*30) 
+                print('-'*50) 
                 print(f'Round {round} Started!')
                 
                 resultsOutput.write('\n')
-                resultsOutput.write('-'*30)
+                resultsOutput.write('-'*90)
                 resultsOutput.write('\n')
                 resultsOutput.write(f'Round {round} | Results\n')
-                resultsOutput.write('-'*30)
+                resultsOutput.write('-'*90)
                 resultsOutput.write('\n')
                 
-                print('-'*30) 
+                print('-'*50) 
                 
                 currentDeck = originalDeck.copy()
                 #print('Now it is', len(currentDeck))
@@ -258,7 +257,7 @@ def main():
                     if playerList[i].get_points() >= 1:
                                             
                         print(f'{playerList[i].name}, it\'s your turn!')
-                        print(f'You currently have {playerList[i].get_points()} points!')
+                        print(f'You currently have {playerList[i].get_points()} tokens!')
                         playerList[i].update_bet(int(input('How much would you like to bet?: ')))
                         print('')
                         
@@ -273,14 +272,15 @@ def main():
                         print('')
                         
                     else:
-                        print(f'{playerList[i].name}, you do not have any remaining points!')
+                        print(f'{playerList[i].name}, you do not have any remaining tokens!')
+                        print('')
                     
-                    print('-'*30) 
+                    print('-'*50) 
                     print('')
                 
-                # print('-'*30) 
+                # print('-'*50) 
                 # print(f'Round {round} Started!')
-                # print('-'*30) 
+                # print('-'*50) 
 
                 for i in range(0, len(playerList)):
                                         
@@ -325,21 +325,21 @@ def main():
                             elif playerList[i].get_roundSum() > 21:
                                 print('')
                                 print('Bust! You\'ve went over 21! Better luck next round!')
-                                print('')
                                 break
                                 
-                            print('-'*30) 
+                            print('-'*50) 
                             flag2 = input(f'Your sum is {playerList[i].get_roundSum()}! Hit or Stand? (H/S) ')
-                            print('-'*30) 
+                            print('-'*50) 
                             
                             if flag2 == 'S':
                                 Flag = False
 
-                        if playerList[i].get_roundSum() < 21:     
+                        if playerList[i].get_roundSum() < 21:
+                            print('')    
                             print(f'{playerList[i].name}, your total is {playerList[i].get_roundSum()}!')
-                        print('-'*30)
                         print('')
-                        print('-'*30)
+                        print('-'*50)
+                        print('-'*50)
                         print('')    
                         
                 print('Dealer\'s Turn!')
@@ -347,7 +347,7 @@ def main():
                 dealerSum = 0
                 
                 viewDealer = getpass.getpass(prompt=f'Press Enter to View the Dealer\'s Cards!', stream=None)
-                print('-'*30)
+                print('-'*50)
                 print('')
                 
                 if not viewDealer:
@@ -360,15 +360,15 @@ def main():
                         dealerSum += CardValues[value[2]]
                     
                     print('')
-                    print('-'*30) 
+                    print('-'*50) 
                     print(f'The dealer is at {dealerSum}!')
-                    print('-'*30) 
+                    print('-'*50) 
                     print('')
                     
                 for i in range(len(playerList)):
                     if playerList[i].get_points() == 0:
-                        continue
-                    
+                        resultsOutput.write(f'Player Name: {playerList[i].name} | (No Tokens)')
+                        resultsOutput.write('\n')
                     else:
                         
                         if playerList[i].get_roundSum() <= 21:
@@ -377,7 +377,7 @@ def main():
                                 playerList[i].update_points(playerList[i].get_points() + \
                                     playerList[i].get_bet())
                                 
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {0} Tokens (PUSH / NO-CHANGE)\n')
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {0} Tokens (PUSH / NO-CHANGE)\n')
                                 
                                 print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
                                 print('')
@@ -386,7 +386,7 @@ def main():
                                 playerList[i].update_points(playerList[i].get_points() + \
                                     (2*playerList[i].get_bet()))
                                 
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet()} Tokens (WIN)\n')
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {+playerList[i].get_bet()} Tokens (WIN)\n')
                                 
                                 print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
                                 print('')
@@ -395,7 +395,7 @@ def main():
                                 playerList[i].update_points(playerList[i].get_points() + \
                                     (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
                                 
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} Tokens (BLACKJACK WIN)\n')
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {+playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} Tokens (BLACKJACK WIN)\n')
                                 
                                 print(f'Amazing {playerList[i].name}! The blackjack won you a total of {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
                                 print('')
@@ -403,23 +403,23 @@ def main():
                             else:     
                                 print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
                                 print('')
-                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {-playerList[i].get_bet()} Tokens (LOSS)\n')
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {-playerList[i].get_bet()} Tokens (LOSS)\n')
                         else:
                             print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
                             print('')
-                        resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {-playerList[i].get_bet()} Tokens (LOSS/BUST)\n')
-                
-                print('-'*30)
+                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Round Change: {-playerList[i].get_bet()} Tokens (LOSS/BUST)\n')
+
+                print('-'*50)
                 print(f'Round {round} | Results!')
-                print('-'*30)
+                print('-'*50)
                 
                 for i in range(len(playerList)):
                     playerList[i].reset_bet()
                     playerList[i].reset_roundSum()
-                    print(playerList[i])
+                    print(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()}')
                     print('')
                     
-                print('-'*30)
+                print('-'*50)
                 
                 round += 1
                 
@@ -427,10 +427,10 @@ def main():
                 break
   
     resultsOutput.write('\n')
-    resultsOutput.write('-'*30)
+    resultsOutput.write('-'*90)
     resultsOutput.write('\n')
     resultsOutput.write(f'Game | Final Results\n')
-    resultsOutput.write('-'*30)
+    resultsOutput.write('-'*90)
     resultsOutput.write('\n')
     
     for i in range(len(playerList)):
