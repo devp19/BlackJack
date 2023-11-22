@@ -1,0 +1,25 @@
+BlackJack Game History | Developed by Dev Patel
+
+------------------------------------------------------------------------------------------
+Round 1 | Results
+------------------------------------------------------------------------------------------
+Player Name: Dev | Tokens: 225 | Round Change: 125 Tokens (BLACKJACK WIN)
+Player Name: Deep | Tokens: 20 | Round Change: -80 Tokens (LOSS/BUST)
+
+------------------------------------------------------------------------------------------
+Round 2 | Results
+------------------------------------------------------------------------------------------
+Player Name: Dev | Tokens: 325 | Round Change: 100 Tokens (WIN)
+Player Name: Deep | Tokens: 70 | Round Change: 50 Tokens (BLACKJACK WIN)
+
+------------------------------------------------------------------------------------------
+Round 3 | Results
+------------------------------------------------------------------------------------------
+Player Name: Dev | Tokens: 125 | Round Change: -200 Tokens (LOSS/BUST)
+Player Name: Deep | Tokens: 0 | Round Change: -70 Tokens (LOSS/BUST)
+
+------------------------------------------------------------------------------------------
+Game | Final Results
+------------------------------------------------------------------------------------------
+Player Name: Dev | Final Tokens: 125 | Gain/Loss: 25
+Player Name: Deep | Final Tokens: 0 | Gain/Loss: -100

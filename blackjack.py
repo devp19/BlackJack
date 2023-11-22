@@ -310,19 +310,22 @@ def main():
                         print('')
                         
                         Flag = True
-                        AceFound = False
 
                         while Flag == True:
+                            
                             value = random.choice(currentDeck)
-                            #print(value)
+                            
                             type = Suit.get(value[1]) 
 
-                            if AceFound == False or ((AceFound == True) and value[2] != 'A'):
-                                playerList[i].update_cardSum(CardValues[value[2]])
-                                
-                            elif AceFound == True and value[2] == 'A':
-                                print('You already have an ACE so 1 has been added to your sum!')
+                            if value[2] == 'A' and (playerList[i].get_roundSum() + 11) > 21:
+                                print('Favourable ACE! 1 has been added to your total to avoid going bust!')
                                 playerList[i].update_cardSum(1)
+                                
+                            elif value[2] == 'A' and (playerList[i].get_roundSum() + 11) <= 21:
+                                playerList[i].update_cardSum(CardValues[value[2]])
+                            
+                            else:
+                                playerList[i].update_cardSum(CardValues[value[2]])
                                 
                             #print(playerList[i].get_roundSum())
                             displayCard(value, type)
