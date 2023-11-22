@@ -195,10 +195,42 @@ Suit = {
 # ----------------------------------
 
 def playerSetup(playerList):
-    numberofPlayers = int(input('Enter number of players playing: '))
-
+    
+    invalidInput = True
+    invalidName = True
+    
+    while invalidInput:
+        
+        try:
+            numberofPlayers = int(input('Enter number of players playing: '))
+            print('')
+            if numberofPlayers <= 0:
+                raise ValueError
+        except ValueError:
+            print('Make sure to enter an integer above 0! You can\'t play a game with no one!')
+            print('')
+            invalidInput = True
+        else:
+            invalidInput = False
+            
     for i in range(1, numberofPlayers+1):
-        playerName = input(f'Enter Player {i} Name: ')
+        
+        while invalidName:
+            
+            try:
+                playerName = input(f'Enter Player {i} Name: ')
+                    
+                if not playerName:
+                    raise EOFError
+                
+            except EOFError:
+                print('Don\'t forget to enter your name!')
+                print('')
+            else:
+                invalidName = False
+        
+        invalidName = True
+            
         playerObj = Players(playerName)
         playerList.append(playerObj)
         
@@ -221,8 +253,22 @@ def main():
     print('')
     print('Press Enter/Return to start playing!')
     
-    beginGame = getpass.getpass(prompt='', stream=None)
-
+    notStarted = True
+    
+    while notStarted:
+    
+        try:
+            beginGame = getpass.getpass(prompt='', stream=None)
+            
+            if beginGame:
+                raise ValueError
+        
+        except ValueError:
+            print('Press --> Enter/Return <--- on your keyboard to start!')
+        
+        else:
+            notStarted = False
+        
     if not beginGame:
         
         print('-'*50) 
@@ -246,10 +292,12 @@ def main():
         
         while gameRunning:
             
-            print(f'Press Enter to Start Round {round}!')
-            print('Any other key to end game and get final scores!')
+            # print(f'Press Enter/Return To Start Round {round}!')
+            # print('Any other key to end game and get final scores!')
             
-            beginRound = input()
+            beginRound = getpass.getpass(prompt=f'Press Enter/Return To Start Round {round}!\nPress any other Key followed by the Enter/Return key to end game and get final scores!', stream=None)
+
+            #beginRound = input()
             
             if not beginRound:       
 
@@ -318,7 +366,9 @@ def main():
                             type = Suit.get(value[1]) 
 
                             if value[2] == 'A' and (playerList[i].get_roundSum() + 11) > 21:
+                                print('')
                                 print('Favourable ACE! 1 has been added to your total to avoid going bust!')
+                                print('')
                                 playerList[i].update_cardSum(1)
                                 
                             elif value[2] == 'A' and (playerList[i].get_roundSum() + 11) <= 21:
@@ -339,7 +389,6 @@ def main():
                             if playerList[i].get_roundSum() == 21:
                                 print('')
                                 print('BLACKJACK! You Hit 21! Let\'s see how the dealer does!')
-                                print('')
                                 break
 
                             elif playerList[i].get_roundSum() > 21:
