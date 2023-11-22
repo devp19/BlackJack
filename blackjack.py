@@ -265,7 +265,7 @@ def main():
                         if playerList[i].get_bet() > playerList[i].get_points():
                             playerList[i].update_bet(playerList[i].get_points())
                             print('')
-                            print(f'Your bet has been set to {playerList[i].get_bet()} since you didn\'t have enough points!')
+                            print(f'Your bet has been set to {playerList[i].get_bet()} since you didn\'t have enough tokens!')
                         
                         playerList[i].update_points(playerList[i].get_points() - playerList[i].get_bet())
                 
@@ -273,7 +273,6 @@ def main():
                         print('')
                         
                     else:
-                        print('')
                         print(f'{playerList[i].name}, you do not have any remaining points!')
                     
                     print('-'*30) 
@@ -367,43 +366,47 @@ def main():
                     print('')
                     
                 for i in range(len(playerList)):
-
-                    if playerList[i].get_roundSum() <= 21:
-                        
-                        if dealerSum == playerList[i].get_roundSum():
-                            playerList[i].update_points(playerList[i].get_points() + \
-                                playerList[i].get_bet())
-                            
-                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {0} Tokens (PUSH / NO-CHANGE)\n')
-                            
-                            print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
-                            print('')
-                            
-                        elif (dealerSum < playerList[i].get_roundSum() < 21) or (dealerSum > 21 and playerList[i].get_roundSum() < 21):
-                            playerList[i].update_points(playerList[i].get_points() + \
-                                (2*playerList[i].get_bet()))
-                            
-                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet()} Tokens (WIN)\n')
-                            
-                            print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
-                            print('')
-                            
-                        elif playerList[i].get_roundSum() == 21:
-                            playerList[i].update_points(playerList[i].get_points() + \
-                                (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
-                            
-                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} Tokens (BLACKJACK WIN)\n')
-                            
-                            print(f'Amazing {playerList[i].name}! The blackjack won you a total of {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
-                            print('')
-                            
-                        else:     
-                            print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
-                            print('')
-                            resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {-playerList[i].get_bet()} Tokens (LOSS)\n')
+                    if playerList[i].get_points() == 0:
+                        continue
+                    
                     else:
-                        print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
-                        print('')
+                        
+                        if playerList[i].get_roundSum() <= 21:
+                            
+                            if dealerSum == playerList[i].get_roundSum():
+                                playerList[i].update_points(playerList[i].get_points() + \
+                                    playerList[i].get_bet())
+                                
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {0} Tokens (PUSH / NO-CHANGE)\n')
+                                
+                                print(f'{playerList[i].name}, you tied with the dealer! You get your tokens back.')
+                                print('')
+                                
+                            elif (dealerSum < playerList[i].get_roundSum() < 21) or (dealerSum > 21 and playerList[i].get_roundSum() < 21):
+                                playerList[i].update_points(playerList[i].get_points() + \
+                                    (2*playerList[i].get_bet()))
+                                
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet()} Tokens (WIN)\n')
+                                
+                                print(f'{playerList[i].name}, nicely done! You won {playerList[i].get_bet()} tokens!')
+                                print('')
+                                
+                            elif playerList[i].get_roundSum() == 21:
+                                playerList[i].update_points(playerList[i].get_points() + \
+                                    (2*playerList[i].get_bet()) + int(1.5 * playerList[i].get_bet()))
+                                
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {+playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} Tokens (BLACKJACK WIN)\n')
+                                
+                                print(f'Amazing {playerList[i].name}! The blackjack won you a total of {playerList[i].get_bet() + int(1.5 * playerList[i].get_bet())} tokens!')
+                                print('')
+                                
+                            else:     
+                                print(f'Tough luck {playerList[i].name}. You lost your bet of {playerList[i].get_bet()}!')
+                                print('')
+                                resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {-playerList[i].get_bet()} Tokens (LOSS)\n')
+                        else:
+                            print(f'{playerList[i].name}, tough luck! Since you busted, you lost {playerList[i].get_bet()} tokens. Better luck next time!')
+                            print('')
                         resultsOutput.write(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()} | Change: {-playerList[i].get_bet()} Tokens (LOSS/BUST)\n')
                 
                 print('-'*30)
@@ -423,8 +426,20 @@ def main():
             else:
                 break
   
+    resultsOutput.write('\n')
+    resultsOutput.write('-'*30)
+    resultsOutput.write('\n')
+    resultsOutput.write(f'Game | Final Results\n')
+    resultsOutput.write('-'*30)
+    resultsOutput.write('\n')
+    
+    for i in range(len(playerList)):
+        resultsOutput.write(f'Player Name: {playerList[i].name} | Final Tokens: {playerList[i].get_points()} | Gain/Loss: {playerList[i].get_points() - 100}')
+        resultsOutput.write('\n')
+        
     resultsOutput.close()
-    print('Have a good day!')
+    
+    print('Thanks for playing!')
         
 if __name__ == '__main__':
     main()
