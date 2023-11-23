@@ -34,7 +34,7 @@ In order to simulate this card-game, the sub-problems include but are not limite
                 ↳ Suit Display (HEART/SPADE/CLUB/DIAMOND) | (Select the suit from the random card)
                 
     iv) Token System
-        ↳ Token Distribution (Arithemetic Operations) | (Adder/Subtractor and BlackJack multiplier for round win/loss)
+        ↳ Token Distribution (Arithemetic Operations) | (Adder/Subtractor and BlackJack Multiplier)
         
     v) Game History
         ↳ Store Round Data (Build Game History) --> Output to a File!
@@ -46,7 +46,6 @@ In order to simulate this card-game, the sub-problems include but are not limite
 # ----------------------------------
 
 import random
-import getpass
 
 # ------------------------------------
 # Create Deck of Cards (File Input)
@@ -258,7 +257,7 @@ def main():
     while notStarted:
     
         try:
-            beginGame = getpass.getpass(prompt='', stream=None)
+            beginGame = input()
             
             if beginGame:
                 raise ValueError
@@ -295,9 +294,10 @@ def main():
             # print(f'Press Enter/Return To Start Round {round}!')
             # print('Any other key to end game and get final scores!')
             
-            beginRound = getpass.getpass(prompt=f'Press Enter/Return To Start Round {round}!\nPress any other Key followed by the Enter/Return key to end game and get final scores!', stream=None)
+            beginRound = input(f'Enter/Return to Start Round {round}!\nAny other key to quit and get final results! ')
 
             #beginRound = input()
+            print('')
             
             if not beginRound:       
 
@@ -320,10 +320,24 @@ def main():
                 for i in range(0, len(playerList)):
                     
                     if playerList[i].get_points() >= 1:
-                                            
+                        invalidBet = True
+                        currentBet = 0
                         print(f'{playerList[i].name}, it\'s your turn!')
                         print(f'You currently have {playerList[i].get_points()} tokens!')
-                        playerList[i].update_bet(int(input('How much would you like to bet?: ')))
+                        
+                        while invalidBet:
+                            try: 
+                                currentBet = int(input('How much would you like to bet?: '))
+                                if currentBet <= 0:
+                                    raise ValueError
+                            except ValueError:
+                                print('Make sure to enter an integer above 0 as your bet!')
+                                print('')
+                            else:
+                                invalidBet = False
+                                
+                        playerList[i].update_bet(currentBet)
+                        invalidBet = True
                         print('')
                         
                         if playerList[i].get_bet() > playerList[i].get_points():
@@ -357,9 +371,9 @@ def main():
                         print(f'{playerList[i].name}, your turn! ')
                         print('')
                         
-                        Flag = True
+                        currentRound = True
 
-                        while Flag == True:
+                        while currentRound == True:
                             
                             value = random.choice(currentDeck)
                             
@@ -379,10 +393,6 @@ def main():
                                 
                             #print(playerList[i].get_roundSum())
                             displayCard(value, type)
-
-                            if value[2] == 'A':
-                                AceFound = True
-                                
                             currentDeck.remove(value)
                             #print('Now it is', len(currentDeck))
                             
@@ -396,12 +406,30 @@ def main():
                                 print('Bust! You\'ve went over 21! Better luck next round!')
                                 break
                                 
-                            print('-'*50) 
-                            flag2 = input(f'Your sum is {playerList[i].get_roundSum()}! Hit or Stand? (H/S) ')
-                            print('-'*50) 
+                            print('-'*50)
                             
-                            if flag2 == 'S':
-                                Flag = False
+                            hitStand = ''
+                            options = True
+                            
+                            while options ==  True:
+                                
+                                try:
+                                    hitStand = input(f'Your total is {playerList[i].get_roundSum()}! Hit or Stand? (H/S) ')
+                                    
+                                    if hitStand not in 'HhSs' or (not hitStand):
+                                        raise ValueError
+                                    
+                                except ValueError:
+                                    print('Make sure to enter one of the options! (H/S) ')
+                                    print('')
+                                else:
+                                    options = False
+                            
+                            if hitStand in ['S', 's']:
+                                currentRound = False
+                                        
+                            print('-'*50) 
+                        
 
                         if playerList[i].get_roundSum() < 21:
                             print('')    
@@ -415,7 +443,7 @@ def main():
                 print('')
                 dealerSum = 0
                 
-                viewDealer = getpass.getpass(prompt=f'Press Enter to View the Dealer\'s Cards!', stream=None)
+                viewDealer = input('Press Enter to View the Dealer\'s Cards!')
                 print('-'*50)
                 print('')
                 
@@ -482,16 +510,25 @@ def main():
                 print(f'Round {round} | Results!')
                 print('-'*50)
                 
+                zeroTokens = 0
+                
                 for i in range(len(playerList)):
                     playerList[i].reset_bet()
                     playerList[i].reset_roundSum()
                     print(f'Player Name: {playerList[i].name} | Tokens: {playerList[i].get_points()}')
                     print('')
                     
+                    if playerList[i].get_points() == 0:
+                        zeroTokens += 1
+                    
                 print('-'*50)
                 
                 round += 1
                 
+                if zeroTokens == len(playerList):
+                    print('')
+                    print('All players have lost their tokens! That concludes the game!')
+                    break
             else:
                 break
   
@@ -508,8 +545,9 @@ def main():
         
     resultsOutput.close()
     
-    print('Thanks for playing!')
-        
+    print('Thanks for playing! Make sure to check the results file for the game history!')
+    print('')
+    
 if __name__ == '__main__':
     main()
     
