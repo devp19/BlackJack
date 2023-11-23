@@ -110,12 +110,6 @@ class Players():
     def get_roundSum(self):
         return self.roundSum
 
-    # print(playerList[0].get_points())
-
-    # playerList[0].update_points(90)
-
-    # print(playerList[0].get_points())
-    
 # --------------------------------
 # Card Display Function
 # --------------------------------
@@ -147,8 +141,6 @@ def displayCard(value, type):
 
         for row in card:
             print(' '.join(row))
-        
-#displayCard()
 
 # --------------------------------
 # Giving Values to Cards
@@ -171,8 +163,6 @@ CardValues = {
     '1': 1
     }
 
-#print(royalValues['K']) == 10
-
 # ----------------------------------
 # Card Symbols to Name for Display
 # ----------------------------------
@@ -183,11 +173,6 @@ Suit = {
     'CLUB' : '♣',
     'HEART' : '♥'
 }
-
-# type = Suit.get(value[1])
-# print(type)
-
-# displayCard(value, type)
 
 # ----------------------------------
 # Create Player Instance
@@ -291,12 +276,7 @@ def main():
         
         while gameRunning:
             
-            # print(f'Press Enter/Return To Start Round {round}!')
-            # print('Any other key to end game and get final scores!')
-            
             beginRound = input(f'Enter/Return to Start Round {round}!\nAny other key to quit and get final results! ')
-
-            #beginRound = input()
             print('')
             
             if not beginRound:       
@@ -314,7 +294,6 @@ def main():
                 print('-'*50) 
                 
                 currentDeck = originalDeck.copy()
-                #print('Now it is', len(currentDeck))
                 print('')
                 
                 for i in range(0, len(playerList)):
@@ -357,17 +336,13 @@ def main():
                     print('-'*50) 
                     print('')
                 
-                # print('-'*50) 
-                # print(f'Round {round} Started!')
-                # print('-'*50) 
-
                 for i in range(0, len(playerList)):
                                         
                     if playerList[i].get_bet() == 0:
                         continue
 
                     else:
-                        #print('')
+                
                         print(f'{playerList[i].name}, your turn! ')
                         print('')
                         
@@ -391,10 +366,8 @@ def main():
                             else:
                                 playerList[i].update_cardSum(CardValues[value[2]])
                                 
-                            #print(playerList[i].get_roundSum())
                             displayCard(value, type)
                             currentDeck.remove(value)
-                            #print('Now it is', len(currentDeck))
                             
                             if playerList[i].get_roundSum() == 21:
                                 print('')
