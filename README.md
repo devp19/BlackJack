@@ -47,6 +47,7 @@ This project was developed as a demonstration of Python programming skills. The 
 
 ## Usage
 
+- Make sure `results.txt` file is empty before starting. (Delete any previous game history!)
 - Follow the on-screen prompts to set up the game and start playing.
 - Press Enter/Return to progress through the game rounds.
 - Enter the number of players, their names, and place bets when prompted.
