@@ -590,6 +590,9 @@ def main():
                     #^ If the number of players with zero tokens equals the total amount of players
                     break
                     #^ Break out of game (no more bets can be made therefore game is over.)
+                else:
+                    zeroTokens = 0
+                    #^ Sets it back to zero to let other players continue playing.
             else:
                 break
   
