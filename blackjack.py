@@ -1,8 +1,6 @@
 '''
-CPS 109 - Assignment
 Project Name : BlackJack
 Developed By : Dev Patel
-Section No.  : 4
 '''
 
 # ----------------------------------
