@@ -9,9 +9,6 @@ Developed By : Dev Patel
 
 '''
 
-The problem/program I've decided to work on to showcase my python skills and abilities
-for this assignment is to simulate the card-game "BlackJack". 
-
 In order to simulate this card-game, the sub-problems include but are not limited to the following:
     
     i) Deck of Cards
